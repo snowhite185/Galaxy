@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Galaxy</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Attendees</string>
+    <string name="title_notifications">Notifications</string>
+</resources>
