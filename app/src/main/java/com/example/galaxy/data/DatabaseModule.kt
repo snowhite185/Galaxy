@@ -33,6 +33,6 @@ class DatabaseModule {
             appContext,
             GalaxyDatabase::class.java,
             "galaxy_database"
-        ).createFromAsset("database/members_table.sql").build()
+        ).createFromAsset("database/galaxy_database.db").build()
     }
 }
