@@ -9,22 +9,29 @@ import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.galaxy.R
 import com.example.galaxy.data.GalaxyDatabase
 import com.example.galaxy.data.GalaxyRepository
+import com.example.galaxy.data.entity.Members
 import com.example.galaxy.databinding.FragmentDashboardBinding
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
+
+@AndroidEntryPoint
 class DashboardFragment : Fragment() {
 
     private lateinit var dashboardViewModel: DashboardViewModel
     private var _binding: FragmentDashboardBinding? = null
+    private lateinit var adapter: MembersListAdapter
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -62,24 +69,26 @@ class DashboardFragment : Fragment() {
             datePicker.show()
         }
 
-        val dao = GalaxyDatabase.getDatabase(requireContext()).membersDao()
-        val attdao = GalaxyDatabase.getDatabase(requireContext()).attendanceDao()
-        val repository = GalaxyRepository(attdao,dao)
-        val viewModel = MemberListItemViewModelFactory(repository)
-        val recyclerview :RecyclerView =binding.recyclerView
-
+        val viewModel: MembersListItemViewModel by viewModels()
+        val recyclerview: RecyclerView = binding.recyclerView
+        recyclerview.layoutManager = LinearLayoutManager(requireActivity())
+        adapter = MembersListAdapter()
+        recyclerview.apply {
+            adapter
+        }
+        viewModel.getMembers().observe(this, Observer<List<Members>> {
+            adapter.setData(it)
+            adapter.notifyDataSetChanged()
+        })
 
         // this creates a vertical layout Manager
-        recyclerview.layoutManager = LinearLayoutManager(requireActivity())
 
         // ArrayList of class ItemsViewModel
-        val data = ArrayList<MembersListItemViewModel>()
 
         // This loop will create 20 Views containing
         // the image with the count of view
 
         // This will pass the ArrayList to our Adapter
-        val adapter = MembersListAdapter(data)
 
         // Setting the Adapter with the recyclerview
         recyclerview.adapter = adapter

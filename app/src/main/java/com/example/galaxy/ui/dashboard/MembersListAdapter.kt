@@ -6,11 +6,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.galaxy.R
+import com.example.galaxy.data.entity.Members
 import com.example.galaxy.databinding.FragmentDashboardBinding
 
-class MembersListAdapter(private val mList: List<MembersListItemViewModel>) :
+class MembersListAdapter :
     RecyclerView.Adapter<MembersListAdapter.ViewHolder>() {
 
+    private lateinit var mList: List<Members>
 
     class ViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
         val textView: TextView = itemView.findViewById(R.id.tvMemberName)
@@ -27,13 +29,15 @@ class MembersListAdapter(private val mList: List<MembersListItemViewModel>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val itemsViewModel = mList[position]
+        holder.textView.text = itemsViewModel.name
 
-
-        // sets the text to the textview from our itemHolder class
-//        holder.textView.text = itemsViewModel.name
     }
 
     override fun getItemCount(): Int {
-        return mList.size
+        return 0
+    }
+
+    fun setData(data: List<Members>) {
+        mList = data
     }
 }

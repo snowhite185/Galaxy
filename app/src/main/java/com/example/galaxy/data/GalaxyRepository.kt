@@ -1,15 +1,18 @@
 package com.example.galaxy.data
 
 import androidx.annotation.WorkerThread
+import com.example.galaxy.GalaxyApplication
 import com.example.galaxy.data.dao.AttendanceDao
 import com.example.galaxy.data.dao.MembersDao
 import com.example.galaxy.data.entity.Attendance
 import com.example.galaxy.data.entity.Members
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
 // Declares the DAO as a private property in the constructor. Pass in the DAO
 // instead of the whole database, because you only need access to the DAO
-class GalaxyRepository(private val attendanceDao: AttendanceDao,private val membersDao: MembersDao) {
+class GalaxyRepository @Inject constructor(private val attendanceDao: AttendanceDao, private val membersDao: MembersDao) {
+
 
     // Room executes all queries on a separate thread.
     // Observed Flow will notify the observer when the data has changed.

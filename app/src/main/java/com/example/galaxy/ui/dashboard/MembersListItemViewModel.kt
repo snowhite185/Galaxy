@@ -1,15 +1,18 @@
 package com.example.galaxy.ui.dashboard
 
 import android.provider.MediaStore
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.liveData
+import androidx.lifecycle.*
 import com.example.galaxy.data.GalaxyRepository
 import com.example.galaxy.data.entity.Members
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MembersListItemViewModel(private val repository: GalaxyRepository) : ViewModel() {
+@HiltViewModel
+class MembersListItemViewModel @Inject constructor(private val repository: GalaxyRepository) :
+    ViewModel() {
 
-    val members : LiveData<List<Members>> = repository.members.asLiveData()
-
+    fun getMembers(): LiveData<List<Members>> {
+        return repository.members.asLiveData()
+    }
 }
