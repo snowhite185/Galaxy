@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "899954523211",
+    "project_id": "galaxy-ed8e3",
+    "storage_bucket": "galaxy-ed8e3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:899954523211:android:e802c3ee6066bb709aa1ce",
+        "android_client_info": {
+          "package_name": "com.example.galaxy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "899954523211-jsjmrnb3vv9pnlngpln6qg9d6bllfgg5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.galaxy",
+            "certificate_hash": "9288f007f1d82f2c1db641ac6896e41d77bf463b"
+          }
+        },
+        {
+          "client_id": "899954523211-qb809r1tf0qd0mbssvbfktdtckin6lq0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjLCzt3rsMrpeg-TEY85C4SX4mDvQaMgg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "899954523211-qb809r1tf0qd0mbssvbfktdtckin6lq0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
