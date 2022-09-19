@@ -59,20 +59,21 @@ class LoginActivity : ComponentActivity() {
 @ExperimentalMaterialApi
 @Composable
 fun LoginScreen() {
+    println("Login: Render")
     val context = LocalContext.current
     val viewModel = viewModel<LoginViewModel>()
     val state by viewModel.loginState.collectAsState()
+
     val launcher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
             viewModel.signIn(task)
         }
+
     val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
         .requestEmail()
         .build()
     val googleSignInClient = GoogleSignIn.getClient(LocalContext.current, gso)
-
-    //val account = GoogleSignIn.getLastSignedInAccount(this)
 
     when (state) {
         LoginViewModel.States.SUCCESS -> {
@@ -86,7 +87,8 @@ fun LoginScreen() {
             launcher.launch(googleSignInClient.signInIntent)
         }
         LoginViewModel.States.IDLE -> {
-            viewModel.pageLoad()
+            val account = GoogleSignIn.getLastSignedInAccount(context)
+            viewModel.pageLoad(account)
         }
     }
 
