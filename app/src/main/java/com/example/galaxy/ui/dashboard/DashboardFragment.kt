@@ -5,98 +5,52 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.DatePicker
-import android.widget.EditText
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.galaxy.R
-import com.example.galaxy.data.GalaxyDatabase
-import com.example.galaxy.data.GalaxyRepository
-import com.example.galaxy.data.entity.Members
 import com.example.galaxy.databinding.FragmentDashboardBinding
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 import java.util.*
 
 
 @AndroidEntryPoint
 class DashboardFragment : Fragment() {
 
-    private lateinit var dashboardViewModel: DashboardViewModel
-    private var _binding: FragmentDashboardBinding? = null
-    private lateinit var adapter: MembersListAdapter
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    private val viewModel: MembersListItemViewModel by viewModels()
+    private val dashViewModel: DashboardViewModel by viewModels()
+    private lateinit var binding: FragmentDashboardBinding
+    private val adapter = MembersListAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        dashboardViewModel =
-            ViewModelProvider(this).get(DashboardViewModel::class.java)
+    ): View {
+        binding = FragmentDashboardBinding.inflate(inflater, container, false)
+        binding.viewModel = dashViewModel
+        return binding.root
+    }
 
-        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        val tvDate: TextView = binding.tvDate
-
-        val mcurrentTime = Calendar.getInstance()
-        val year = mcurrentTime.get(Calendar.YEAR)
-        val month = mcurrentTime.get(Calendar.MONTH)
-        val day = mcurrentTime.get(Calendar.DAY_OF_MONTH)
-        tvDate.text =
-            String.format("%d / %d / %d", day, month + 1, year)
+        val cal = Calendar.getInstance()
+        val year = cal.get(Calendar.YEAR)
+        val month = cal.get(Calendar.MONTH)
+        val day = cal.get(Calendar.DAY_OF_MONTH)
 
         val datePicker = DatePickerDialog(
-            requireActivity(),
-            { view, year, month, dayOfMonth ->
-                tvDate.text =
-                    String.format("%d / %d / %d", dayOfMonth, month + 1, year)
+            requireActivity(), { _, _, _, _ ->
+                dashViewModel.dateChanged(day, month + 1, year)
             }, year, month, day
-        );
+        )
 
-        tvDate.setOnClickListener {
+        binding.tvDate.setOnClickListener {
             datePicker.show()
         }
 
-        val viewModel: MembersListItemViewModel by viewModels()
-        val recyclerview: RecyclerView = binding.recyclerView
-        recyclerview.layoutManager = LinearLayoutManager(requireActivity())
-        adapter = MembersListAdapter()
-        recyclerview.apply {
-            adapter
-        }
-        viewModel.getMembers().observe(this, Observer<List<Members>> {
+        binding.recyclerView.adapter = adapter
+        viewModel.getMembers().observe(viewLifecycleOwner) {
             adapter.setData(it)
-            adapter.notifyDataSetChanged()
-        })
-
-        // this creates a vertical layout Manager
-
-        // ArrayList of class ItemsViewModel
-
-        // This loop will create 20 Views containing
-        // the image with the count of view
-
-        // This will pass the ArrayList to our Adapter
-
-        // Setting the Adapter with the recyclerview
-        recyclerview.adapter = adapter
-        return root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+        }
     }
 }

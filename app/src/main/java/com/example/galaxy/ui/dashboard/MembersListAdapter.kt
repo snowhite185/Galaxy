@@ -1,43 +1,42 @@
 package com.example.galaxy.ui.dashboard
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.galaxy.R
 import com.example.galaxy.data.entity.Members
-import com.example.galaxy.databinding.FragmentDashboardBinding
+import com.example.galaxy.databinding.LayoutMembersListItemBinding
 
 class MembersListAdapter :
     RecyclerView.Adapter<MembersListAdapter.ViewHolder>() {
 
-    private lateinit var mList: List<Members>
+    private var mList = ArrayList<Members>()
 
-    class ViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
-        val textView: TextView = itemView.findViewById(R.id.tvMemberName)
+    class ViewHolder(private val binding: LayoutMembersListItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun setData(data: Members) {
+            binding.itemData = data
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        // inflates the card_view_design view
-        // that is used to hold list item
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.layout_members_list_item, parent, false)
-
+        val inflater = LayoutInflater.from(parent.context)
+        val view = LayoutMembersListItemBinding.inflate(inflater, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val itemsViewModel = mList[position]
-        holder.textView.text = itemsViewModel.name
-
+        holder.setData(mList[position])
     }
 
     override fun getItemCount(): Int {
-        return 0
+        return mList.size
     }
 
+    // TODO: replace with ListAdapter to avoid this
     fun setData(data: List<Members>) {
-        mList = data
+        mList.clear()
+        mList.addAll(data)
+        notifyDataSetChanged()
     }
 }
