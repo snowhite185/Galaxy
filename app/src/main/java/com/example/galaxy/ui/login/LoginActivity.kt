@@ -40,7 +40,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
 
-@ExperimentalMaterialApi
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +55,7 @@ class LoginActivity : ComponentActivity() {
     }
 }
 
-@ExperimentalMaterialApi
+
 @Composable
 fun LoginScreen() {
     println("Login: Render")
@@ -133,7 +132,7 @@ fun LoginScreen() {
             textAlign = TextAlign.Center
         )
         Text(
-            text = "The most intelligent app, you will ever need for all your chits. Sign in to get started.",
+            text = "The most intelligent app, you will ever need for all your chit needs. Sign in with google to get started.",
             color = Color.White,
             fontSize = 18.sp,
             modifier = Modifier
@@ -160,7 +159,7 @@ fun LoginScreen() {
                     end.linkTo(parent.end)
                     width = Dimension.fillToConstraints
                 }
-                .height(90.dp)
+                .height(85.dp)
                 .padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 10.dp),
         )
         {
