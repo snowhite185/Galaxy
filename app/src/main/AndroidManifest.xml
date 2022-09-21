@@ -10,6 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Galaxy">
         <activity
+            android:name=".AddNewChitActivity"
+            android:exported="false"
+            android:label="@string/title_activity_add_new_chit"
+            android:theme="@style/Theme.Galaxy">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".TestActivity"
             android:exported="true"
             android:label="@string/title_activity_test"
@@ -17,6 +26,7 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,9 +35,7 @@
         </activity>
         <activity
             android:name=".ui.login.LoginActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".MainActivity"
             android:exported="false" />

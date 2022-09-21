@@ -4,4 +4,5 @@
     <string name="title_dashboard">Attendees</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_test">TestActivity</string>
+    <string name="title_activity_add_new_chit">AddNewChitActivity</string>
 </resources>
