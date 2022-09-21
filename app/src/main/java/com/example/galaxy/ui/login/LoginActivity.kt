@@ -30,8 +30,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.galaxy.MainActivity
 import com.example.galaxy.R
+import com.example.galaxy.ui.home.HomeActivity
 import com.example.galaxy.ui.theme.DarkBlue
 import com.example.galaxy.ui.theme.GalaxyTheme
 import com.example.galaxy.utils.ConstraintContainer
@@ -40,7 +40,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
 
-@ExperimentalMaterialApi
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +55,7 @@ class LoginActivity : ComponentActivity() {
     }
 }
 
-@ExperimentalMaterialApi
+
 @Composable
 fun LoginScreen() {
     println("Login: Render")
@@ -78,7 +77,7 @@ fun LoginScreen() {
     when (state) {
         LoginViewModel.States.SUCCESS -> {
             (context as Activity).finish()
-            context.startActivity(Intent(context, MainActivity::class.java))
+            context.startActivity(Intent(context, HomeActivity::class.java))
         }
         LoginViewModel.States.ERROR -> {
             Toast.makeText(context, "Login Failed", Toast.LENGTH_SHORT).show()
@@ -133,7 +132,7 @@ fun LoginScreen() {
             textAlign = TextAlign.Center
         )
         Text(
-            text = "The most intelligent app, you will ever need for all your chits. Sign in to get started.",
+            text = "The most intelligent app, you will ever need for all your chit needs. Sign in with google to get started.",
             color = Color.White,
             fontSize = 18.sp,
             modifier = Modifier
@@ -160,7 +159,7 @@ fun LoginScreen() {
                     end.linkTo(parent.end)
                     width = Dimension.fillToConstraints
                 }
-                .height(90.dp)
+                .height(85.dp)
                 .padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 10.dp),
         )
         {

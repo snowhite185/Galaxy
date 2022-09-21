@@ -1,4 +1,4 @@
-package com.example.galaxy
+package com.example.galaxy.ui.home
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -15,9 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -27,15 +24,13 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
+import com.example.galaxy.R
 import com.example.galaxy.ui.theme.DarkGreen
 import com.example.galaxy.ui.theme.GalaxyTheme
 import com.example.galaxy.ui.theme.LightGrey
 import com.example.galaxy.ui.theme.MediumBlue
-import com.example.galaxy.utils.ConstraintContainer
 
-class TestActivity : ComponentActivity() {
+class HomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -44,7 +39,7 @@ class TestActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android  ")
+                    HomePage()
                 }
             }
         }
@@ -52,7 +47,7 @@ class TestActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
+fun HomePage() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -62,14 +57,14 @@ fun Greeting(name: String) {
         Row(
             verticalAlignment = Alignment.CenterVertically, modifier = Modifier
                 .padding(
-                    bottom = 20.dp, top = 90.dp, start = 30.dp, end = 30.dp
+                    bottom = 20.dp, top = 0.dp, start = 8.dp, end = 8.dp
                 )
                 .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Column() {
+            Column {
 
                 Text(
-                    text = "Hi $name!",
+                    text = "Hi Jane Doe!",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black,
@@ -105,7 +100,7 @@ fun AddChitView() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 25.dp, start = 30.dp, end = 24.dp, bottom = 12.dp),
+            .padding(top = 25.dp, start = 8.dp, end = 8.dp, bottom = 12.dp),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -134,12 +129,10 @@ fun AddChitView() {
             }
         })
 
-        Row(modifier = Modifier.padding(top = 12.dp, start = 10.dp, end = 10.dp)) {
+        Row(modifier = Modifier.padding(top = 12.dp, start = 8.dp, end = 8.dp)) {
             Image(
                 painter = painterResource(id = R.drawable.ic_search),
-                contentDescription = "Avata",
-                contentScale = ContentScale.FillWidth,
-                modifier = Modifier.fillMaxWidth()
+                contentDescription = "Avatar",
             )
         }
         Column(
@@ -149,15 +142,15 @@ fun AddChitView() {
 
             Text(
                 text = "Your chits will show up here. Start by adding your first chit.",
-                fontSize = 18.sp,
+                fontSize = 16.sp,
                 color = Color.Black,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 20.dp, bottom = 40.dp)
+                modifier = Modifier.padding(top = 20.dp, bottom = 20.dp)
             )
             Button(
                 onClick = { /*TODO*/ },
-                shape = RoundedCornerShape(5.dp),
-                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier.fillMaxWidth().height(50.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = MediumBlue)
             ) {
                 Text(text = "ADD NEW CHIT", fontSize = 16.sp, fontWeight = FontWeight.Bold)
@@ -259,6 +252,6 @@ fun MyCircle() {
 @Composable
 fun DefaultPreview() {
     GalaxyTheme {
-        Greeting("Android")
+        HomePage()
     }
 }
