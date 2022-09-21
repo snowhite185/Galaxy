@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -94,7 +95,7 @@ fun Greeting(name: String) {
                 .fillMaxWidth()
                 .width(1.dp)
         )
-        AddChitView()
+        ChitList()
 
     }
 }
@@ -192,11 +193,18 @@ fun ChitList() {
                     Text(
                         "Kudumbasree chit", fontWeight = FontWeight.Bold, fontSize = 18.sp
                     )
-                    Text(
-                        "18 May 2021 - 18 May 2022",
-                        fontSize = 12.sp,
-                        modifier = Modifier.padding(top = 5.dp, bottom = 5.dp)
-                    )
+                    Row(
+                        modifier = Modifier.padding(top = 5.dp, bottom = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        MyCircle()
+                        Text(
+                            "18 May 2021 - 18 May 2022",
+                            fontSize = 12.sp,
+                            modifier = Modifier.padding(start = 3.dp)
+                        )
+                    }
+
                     Text(buildAnnotatedString {
                         withStyle(
                             SpanStyle(
@@ -227,11 +235,24 @@ fun ChitList() {
                             append("to go ")
                         }
                     })
+
+                    Divider(
+                        color = LightGrey, modifier = Modifier
+                            .fillMaxWidth()
+                            .width(1.dp)
+                    )
                 }
             }
         }
     }
 
+}
+
+@Composable
+fun MyCircle() {
+    Canvas(modifier = Modifier.size(10.dp), onDraw = {
+        drawCircle(color = Color.Red)
+    })
 }
 
 @Preview(showBackground = true)
