@@ -141,15 +141,15 @@ fun AddChitView() {
 
             Text(
                 text = "Your chits will show up here. Start by adding your first chit.",
-                fontSize = 18.sp,
+                fontSize = 16.sp,
                 color = Color.Black,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(top = 20.dp, bottom = 20.dp)
             )
             Button(
                 onClick = { /*TODO*/ },
-                shape = RoundedCornerShape(25.dp),
-                modifier = Modifier.fillMaxWidth().height(50.dp),
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier.fillMaxWidth().height(60.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = MediumBlue)
             ) {
                 Text(text = "ADD NEW CHIT", fontSize = 16.sp, fontWeight = FontWeight.Bold)
