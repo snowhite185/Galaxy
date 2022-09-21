@@ -30,8 +30,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.galaxy.MainActivity
 import com.example.galaxy.R
+import com.example.galaxy.ui.home.HomeActivity
 import com.example.galaxy.ui.theme.DarkBlue
 import com.example.galaxy.ui.theme.GalaxyTheme
 import com.example.galaxy.utils.ConstraintContainer
@@ -78,7 +78,7 @@ fun LoginScreen() {
     when (state) {
         LoginViewModel.States.SUCCESS -> {
             (context as Activity).finish()
-            context.startActivity(Intent(context, MainActivity::class.java))
+            context.startActivity(Intent(context, HomeActivity::class.java))
         }
         LoginViewModel.States.ERROR -> {
             Toast.makeText(context, "Login Failed", Toast.LENGTH_SHORT).show()
