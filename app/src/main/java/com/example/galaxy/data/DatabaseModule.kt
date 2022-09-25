@@ -1,8 +1,6 @@
 package com.example.galaxy.data
 
 import android.content.Context
-import androidx.room.Room
-import com.example.galaxy.GalaxyApplication
 import com.example.galaxy.data.dao.AttendanceDao
 import com.example.galaxy.data.dao.MembersDao
 import dagger.Module
@@ -29,10 +27,6 @@ class DatabaseModule {
     @Provides
     @Singleton
     fun provideAppDatabase(@ApplicationContext appContext: Context): GalaxyDatabase {
-        return Room.databaseBuilder(
-            appContext,
-            GalaxyDatabase::class.java,
-            "galaxy_database"
-        ).createFromAsset("database/galaxy_database.db").build()
+        return GalaxyDatabase.getDatabase(appContext)
     }
 }

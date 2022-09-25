@@ -1,4 +1,4 @@
-package com.example.galaxy.ui.login
+package com.example.galaxy.login
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

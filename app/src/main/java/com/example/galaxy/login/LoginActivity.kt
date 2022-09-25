@@ -1,4 +1,4 @@
-package com.example.galaxy.ui.login
+package com.example.galaxy.login
 
 import android.app.Activity
 import android.content.Intent
@@ -31,7 +31,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.galaxy.R
-import com.example.galaxy.ui.home.HomeActivity
+import com.example.galaxy.home.HomeActivity
 import com.example.galaxy.ui.theme.DarkBlue
 import com.example.galaxy.ui.theme.GalaxyTheme
 import com.example.galaxy.utils.ConstraintContainer
@@ -166,7 +166,7 @@ fun LoginScreen() {
             ConstraintLayout(modifier = Modifier.fillMaxSize()) {
                 val (googleImage, text) = createRefs()
                 Image(
-                    painter = painterResource(id = com.example.galaxy.R.drawable.ic_google),
+                    painter = painterResource(id = R.drawable.ic_google),
                     contentDescription = "Sign in button",
                     modifier = Modifier.constrainAs(googleImage) {
                         top.linkTo(parent.top)

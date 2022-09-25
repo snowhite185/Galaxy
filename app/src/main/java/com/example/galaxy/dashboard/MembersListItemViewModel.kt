@@ -1,4 +1,4 @@
-package com.example.galaxy.ui.dashboard
+package com.example.galaxy.dashboard
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel

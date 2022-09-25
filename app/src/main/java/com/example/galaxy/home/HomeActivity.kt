@@ -1,4 +1,4 @@
-package com.example.galaxy.ui.home
+package com.example.galaxy.home
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

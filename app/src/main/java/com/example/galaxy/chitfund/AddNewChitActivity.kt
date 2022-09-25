@@ -1,4 +1,4 @@
-package com.example.galaxy
+package com.example.galaxy.chitfund
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

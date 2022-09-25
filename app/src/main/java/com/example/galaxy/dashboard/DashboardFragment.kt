@@ -1,4 +1,4 @@
-package com.example.galaxy.ui.dashboard
+package com.example.galaxy.dashboard
 
 import android.app.DatePickerDialog
 import android.os.Bundle
