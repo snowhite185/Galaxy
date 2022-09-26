@@ -1,7 +1,6 @@
 package com.example.galaxy
 
 import android.app.Application
-import com.example.galaxy.data.GalaxyDatabase
 import com.example.galaxy.data.GalaxyRepository
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope

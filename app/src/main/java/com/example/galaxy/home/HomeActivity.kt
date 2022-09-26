@@ -1,5 +1,6 @@
 package com.example.galaxy.home
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -24,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.galaxy.R
+import com.example.galaxy.chitfund.AddNewChitActivity
 import com.example.galaxy.ui.theme.DarkGreen
 import com.example.galaxy.ui.theme.GalaxyTheme
 import com.example.galaxy.ui.theme.LightGrey
@@ -38,7 +41,14 @@ class HomeActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-                    HomePage()
+                    HomePage {
+                        startActivity(
+                            Intent(
+                                this@HomeActivity,
+                                AddNewChitActivity::class.java
+                            )
+                        )
+                    }
                 }
             }
         }
@@ -46,7 +56,7 @@ class HomeActivity : ComponentActivity() {
 }
 
 @Composable
-fun HomePage() {
+fun HomePage(onNewChitFundClicked: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -89,13 +99,14 @@ fun HomePage() {
                 .fillMaxWidth()
                 .width(1.dp)
         )
-        AddChitView()
+        AddChitView(onNewChitFundClicked)
 
     }
 }
 
 @Composable
-fun AddChitView() {
+fun AddChitView(onNewChitFundClicked: () -> Unit) {
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -147,9 +158,13 @@ fun AddChitView() {
                 modifier = Modifier.padding(top = 20.dp, bottom = 20.dp)
             )
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    onNewChitFundClicked()
+                },
                 shape = RoundedCornerShape(10.dp),
-                modifier = Modifier.fillMaxWidth().height(50.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = MediumBlue)
             ) {
                 Text(text = "ADD NEW CHIT", fontSize = 16.sp, fontWeight = FontWeight.Bold)
@@ -231,6 +246,8 @@ fun ChitList() {
 @Composable
 fun DefaultPreview() {
     GalaxyTheme {
-        HomePage()
+        HomePage {
+
+        }
     }
 }
