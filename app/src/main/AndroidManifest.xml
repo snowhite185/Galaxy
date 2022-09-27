@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Galaxy">
         <activity
-            android:name=".AddNewChitActivity"
+            android:name=".chitfund.AddNewChitActivity"
             android:exported="false"
             android:label="@string/title_activity_add_new_chit"
             android:theme="@style/Theme.Galaxy">
@@ -19,11 +19,11 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".ui.home.HomeActivity"
+            android:name=".home.HomeActivity"
             android:exported="false"
             android:theme="@style/Theme.Galaxy.LightStatusBar" />
         <activity
-            android:name=".ui.RoutingActivity"
+            android:name=".RoutingActivity"
             android:theme="@style/Theme.Galaxy.Splash"
             android:exported="true">
             <intent-filter>
@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.login.LoginActivity"
+            android:name=".login.LoginActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

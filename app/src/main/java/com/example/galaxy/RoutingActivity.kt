@@ -1,4 +1,4 @@
-package com.example.galaxy.ui
+package com.example.galaxy
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,9 +8,9 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.galaxy.ui.home.HomeActivity
-import com.example.galaxy.ui.login.LoginActivity
-import com.example.galaxy.ui.login.LoginViewModel
+import com.example.galaxy.home.HomeActivity
+import com.example.galaxy.login.LoginActivity
+import com.example.galaxy.login.LoginViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

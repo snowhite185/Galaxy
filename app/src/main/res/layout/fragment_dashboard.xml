@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.galaxy.ui.dashboard.DashboardViewModel" />
+            type="com.example.galaxy.dashboard.DashboardViewModel" />
     </data>
 
     <androidx.core.widget.NestedScrollView xmlns:tools="http://schemas.android.com/tools"
@@ -18,7 +18,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".ui.dashboard.DashboardFragment">
+            tools:context=".dashboard.DashboardFragment">
 
             <TextView
                 android:id="@+id/tvDate"
