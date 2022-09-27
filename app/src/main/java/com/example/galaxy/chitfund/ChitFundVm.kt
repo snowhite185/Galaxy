@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ChitFundVm @Inject constructor(var memberRepository: MemberRepository) : ViewModel() {
 
-    var chitFundInputData by mutableStateOf(ChitFundInput())
+    var chitFundInputData = ChitFundInput()
     private var chitFundData: ChitFund? = null
 
     var members: Data<List<MembersUiState>> by mutableStateOf(Data.Loading())
@@ -22,10 +22,9 @@ class ChitFundVm @Inject constructor(var memberRepository: MemberRepository) : V
 
     init {
         members = Data.Loading()
-        loadMembers()
     }
 
-    private fun loadMembers() {
+    fun getMembers() {
         viewModelScope.launch {
             memberRepository.getAllMembers()
                 .catch {
@@ -36,6 +35,11 @@ class ChitFundVm @Inject constructor(var memberRepository: MemberRepository) : V
                     members = Data.Success(_members)
                 }
         }
+    }
+
+    fun getSelectedMembers() {
+        val result = _members.filter { it.selected }
+        members = Data.Success(result)
     }
 
     fun searchMember(searchText: String) {
@@ -66,8 +70,7 @@ class ChitFundVm @Inject constructor(var memberRepository: MemberRepository) : V
     }
 
     fun onMembersSelected() {
-        chitFundData?.members =
-            this.members.data?.filter { it.selected }?.map { it.member } ?: emptyList()
+        chitFundData?.members = _members.filter { it.selected }.map { it.member }
     }
 
     fun onSkipMemberSelection() {
@@ -75,15 +78,15 @@ class ChitFundVm @Inject constructor(var memberRepository: MemberRepository) : V
     }
 }
 
-data class ChitFundInput(
-    var name: String = "",
-    var premium: String = "",
-    var duration: String = "",
-    var meetingFrequency: String = "",
-    var loanInterest: String = "",
-    var fine: String = "",
-    var loanInterestFreq: String = "",
-)
+class ChitFundInput {
+    var name by mutableStateOf("")
+    var premium by mutableStateOf("")
+    var duration by mutableStateOf("")
+    var meetingFrequency by mutableStateOf("")
+    var loanInterest by mutableStateOf("")
+    var fine by mutableStateOf("")
+    var loanInterestFreq by mutableStateOf("")
+}
 
 data class ChitFund(
     var name: String,
@@ -119,6 +122,8 @@ data class LoanSettings(
 
 data class Member(var id: Int, var name: String, var count: Int, var fundCount: Int = 0)
 data class MembersUiState(val member: Member, var selected: Boolean)
+
+fun List<MembersUiState>.getTotalCount() = this.sumOf { it.member.count }
 
 enum class Frequency(val frequency: String) {
     DAY("day"),

@@ -22,13 +22,13 @@ class AddNewChitActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
             GalaxyTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
+                    println("Rendering: AddNewChitActivity")
                     Column {
                         val chitFundInputData = viewModel.chitFundInputData
                         InputForm(
@@ -41,12 +41,8 @@ class AddNewChitActivity : ComponentActivity() {
                 }
             }
         }
+        viewModel.getMembers()
     }
-}
-
-@Composable
-fun Test(members: List<MembersUiState>) {
-    Text(text = "${members.size} members")
 }
 
 @Composable
@@ -91,12 +87,11 @@ fun InputForm(
             Text(text = "NEXT")
         }
     }
-
 }
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview3() {
+fun DefaultPreview() {
     GalaxyTheme {
         InputForm(
             ChitFundInput(),
