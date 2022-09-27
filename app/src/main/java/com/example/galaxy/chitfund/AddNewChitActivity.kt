@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.galaxy.ui.theme.GalaxyTheme
-import com.example.galaxy.utils.DataStatus
+import com.example.galaxy.utils.Data
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,19 +45,24 @@ class AddNewChitActivity : ComponentActivity() {
 }
 
 @Composable
-fun MembersList(members: DataStatus<List<MembersUiState>>) {
+fun Test(members: List<MembersUiState>) {
+    Text(text = "${members.size} members")
+}
+
+@Composable
+fun MembersList(members: Data<List<MembersUiState>>) {
     println("Rendering: MembersList")
 
     when (members) {
-        is DataStatus.Error ->
+        is Data.Error ->
             Column {
                 Text(text = "Something went wring.")
                 Button(onClick = { /*TODO*/ }) { Text(text = "Retry") }
             }
-        is DataStatus.Loading -> Column {
+        is Data.Loading -> Column {
             Text(text = "Loading, please wait")
         }
-        is DataStatus.Success<List<MembersUiState>> -> {
+        is Data.Success<List<MembersUiState>> -> {
             for (item in members.data!!) {
                 val color = if (item.selected) Color.Blue else Color.Black
                 Text(text = item.member.name, color = color)

@@ -5,8 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.galaxy.utils.DataStatus
+import com.example.galaxy.utils.Data
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -14,22 +15,40 @@ import javax.inject.Inject
 class ChitFundVm @Inject constructor(var memberRepository: MemberRepository) : ViewModel() {
 
     var chitFundInputData by mutableStateOf(ChitFundInput())
-    var members: DataStatus<List<MembersUiState>> by mutableStateOf(DataStatus.Loading())
-
     private var chitFundData: ChitFund? = null
 
+    var members: Data<List<MembersUiState>> by mutableStateOf(Data.Loading())
+    private var _members = ArrayList<MembersUiState>()
+
     init {
-        members = DataStatus.Loading()
+        members = Data.Loading()
         loadMembers()
     }
 
     private fun loadMembers() {
         viewModelScope.launch {
-            memberRepository.getAllMembers().collect { list ->
-                val data = list.map { MembersUiState(it, false) }
-                members = DataStatus.Success(data)
-            }
+            memberRepository.getAllMembers()
+                .catch {
+                    members = Data.Error()
+                }.collect { list ->
+                    val data = list.map { MembersUiState(it, false) }
+                    _members.addAll(data)
+                    members = Data.Success(_members)
+                }
         }
+    }
+
+    fun searchMember(searchText: String) {
+        val result = _members.filter { it.member.name.contains(searchText) }
+        members = Data.Success(result)
+    }
+
+    fun setMemberSelected(id: Int, selected: Boolean) {
+        val selectedMemberIndex = _members.indexOfFirst { it.member.id == id }
+        if (selectedMemberIndex != -1) {
+            _members[selectedMemberIndex].selected = selected
+        }
+        members = Data.Success(_members)
     }
 
     fun onChitFundDataInput() {
@@ -46,8 +65,9 @@ class ChitFundVm @Inject constructor(var memberRepository: MemberRepository) : V
         )
     }
 
-    fun onMembersSelected(members: List<MembersUiState>) {
-        chitFundData?.members = members.filter { it.selected }.map { it.member }
+    fun onMembersSelected() {
+        chitFundData?.members =
+            this.members.data?.filter { it.selected }?.map { it.member } ?: emptyList()
     }
 
     fun onSkipMemberSelection() {
@@ -97,8 +117,8 @@ data class LoanSettings(
     var loanFrequency: Frequency,
 )
 
-data class Member(var name: String, var count: Int, var fundCount: Int = 0)
-data class MembersUiState(val member: Member, val selected: Boolean)
+data class Member(var id: Int, var name: String, var count: Int, var fundCount: Int = 0)
+data class MembersUiState(val member: Member, var selected: Boolean)
 
 enum class Frequency(val frequency: String) {
     DAY("day"),
