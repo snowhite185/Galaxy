@@ -20,8 +20,13 @@ class ChitFundVm @Inject constructor(var memberRepository: MemberRepository) : V
     var members: Data<List<MembersUiState>> by mutableStateOf(Data.Loading())
     private var _members = ArrayList<MembersUiState>()
 
+    var meetingFrequency: List<FrequencyUiState> by mutableStateOf(emptyList())
+    var loanFrequency: List<FrequencyUiState> by mutableStateOf(emptyList())
+
     init {
         members = Data.Loading()
+        meetingFrequency = Frequency.values().map { FrequencyUiState(it, false) }
+        loanFrequency = meetingFrequency.map { it.copy() }
     }
 
     fun getMembers() {
@@ -125,14 +130,14 @@ data class MembersUiState(val member: Member, var selected: Boolean)
 
 fun List<MembersUiState>.getTotalCount() = this.sumOf { it.member.count }
 
+data class FrequencyUiState(val frequency: Frequency, var selected: Boolean)
+
+fun Frequency.format(pre: String = "", post: String = ""): String {
+    return "$pre${this.frequency}$post"
+}
+
 enum class Frequency(val frequency: String) {
     DAY("day"),
     WEEK("week"),
     MONTH("week");
-
-    companion object {
-        fun asDisplayList(pre: String = "", post: String = ""): List<String> {
-            return values().map { "$pre${it.frequency}$post" }
-        }
-    }
 }
