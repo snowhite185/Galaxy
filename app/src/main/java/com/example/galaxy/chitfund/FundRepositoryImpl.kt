@@ -16,10 +16,10 @@ class FundRepositoryImpl @Inject constructor(
     private val chitFundDao: ChitFundDao,
 ) : FundRepository {
 
-    override suspend fun getAllMembers(): Flow<List<Member>> {
+    override suspend fun getAllMembers(): Flow<List<Participant>> {
         return flow {
             emit(memberMappingDao.getMemberChits().map {
-                Member(
+                Participant(
                     id = it.id,
                     name = it.name,
                     currentChits = it.chitCount,
@@ -45,7 +45,7 @@ class FundRepositoryImpl @Inject constructor(
         return data.copy(fundMetaData = ChitFundMetaData(id = fundId))
     }
 
-    override suspend fun addMembers(fundId: Long, members: List<Member>) {
+    override suspend fun addMembers(fundId: Long, members: List<Participant>) {
         var chitNumber: Long = memberMappingDao.getMaxChitNumber() + 1L
         memberDao.insert(members.map { MemberInfo(name = it.name) })
         val memberIds = memberDao.getAllByName(members.map { it.name })
@@ -56,6 +56,34 @@ class FundRepositoryImpl @Inject constructor(
                     memberId = it.id,
                     chitNumber = chitNumber++
                 )
+            )
+        }
+    }
+
+    override suspend fun getAllChits(): List<ChitFund> {
+        val funds = chitFundDao.getAll()
+        return funds.map {
+            val memberInfo = chitFundDao.getMembers(it.id)
+            ChitFund(
+                fundMetaData = ChitFundMetaData(id = it.id),
+                name = it.name,
+                fineForAbsence = it.fineForAbsence,
+                loanSettings = LoanSettings(
+                    interest = it.loanInterest,
+                    loanFrequency = Frequency.valueOf(it.loanPaymentFrequency)
+                ),
+                meetingFrequency = Frequency.valueOf(it.meetingFreq),
+                duration = it.duration,
+                premium = it.premium,
+                members = memberInfo.map { info ->
+                    Member(
+                        memberId = info.memberId,
+                        memberName = info.memberName,
+                        chitNumber = info.chitNumber,
+                        fundName = info.fundName,
+                        fundId = info.fundId,
+                    )
+                }
             )
         }
     }

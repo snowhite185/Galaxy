@@ -47,7 +47,19 @@ interface MemberMappingDao {
 }
 
 data class MemberAndChitInfo(
-    val id: Int,
+    val id: Long,
     val name: String,
     val chitCount: Int,
+)
+
+data class MemberFundInfo(
+    val memberId: Long,
+    val memberName: String,
+    val fundId: Long,
+    val fundName: String,
+    val chitNumber: Long,
+    val finePending: Double? = 0.0,
+    val loanPending: Double? = 0.0,
+    val loanInterestPending: Double? = 0.0,
+    val premiumPending: Double? = 0.0,
 )

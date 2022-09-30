@@ -18,16 +18,18 @@ class ChitFundVm @Inject constructor(var fundRepository: FundRepository) : ViewM
     var chitFundInputData = ChitFundInput()
     private var chitFundData: ChitFund? = null
 
-    var members: Data<List<MembersUiState>> by mutableStateOf(Data.Loading())
+    var allMembers: Data<List<MembersUiState>> by mutableStateOf(Data.Loading())
     private var _members = ArrayList<MembersUiState>()
 
-    var meetingFrequency: List<FrequencyUiState> by mutableStateOf(emptyList())
-    var loanFrequency: List<FrequencyUiState> by mutableStateOf(emptyList())
+    var meetingFrequencies: List<FrequencyUiState> by mutableStateOf(emptyList())
+    var loanFrequencies: List<FrequencyUiState> by mutableStateOf(emptyList())
+
+    var allFunds: List<ChitFund> by mutableStateOf(emptyList())
 
     init {
-        members = Data.Loading()
-        meetingFrequency = Frequency.values().map { FrequencyUiState(it, false) }
-        loanFrequency = meetingFrequency.map { it.copy() }
+        allMembers = Data.Loading()
+        meetingFrequencies = Frequency.values().map { FrequencyUiState(it, false) }
+        loanFrequencies = meetingFrequencies.map { it.copy() }
     }
 
     fun saveChitFund() {
@@ -36,45 +38,45 @@ class ChitFundVm @Inject constructor(var fundRepository: FundRepository) : ViewM
         }
     }
 
+    fun getAllFunds() {
+        viewModelScope.launch(Dispatchers.IO) {
+            allFunds = fundRepository.getAllChits()
+        }
+    }
+
+    fun onSkipMemberSelection() {
+        saveChitFund()
+    }
+
     fun getMembers() {
         viewModelScope.launch(Dispatchers.IO) {
-            fundRepository.saveChitFund(
-                ChitFund(
-                    name = "Club chit 100",
-                    premium = 100.0,
-                    duration = 60,
-                    meetingFrequency = Frequency.WEEK,
-                    loanSettings = LoanSettings(interest = 1.0, loanFrequency = Frequency.WEEK),
-                    fineForAbsence = 10.0
-                )
-            )
             fundRepository.getAllMembers()
                 .catch {
-                    members = Data.Error()
+                    allMembers = Data.Error()
                 }.collect { list ->
                     val data = list.map { MembersUiState(it, false) }
                     _members.addAll(data)
-                    members = Data.Success(_members)
+                    allMembers = Data.Success(_members)
                 }
         }
     }
 
     fun getSelectedMembers() {
         val result = _members.filter { it.selected }
-        members = Data.Success(result)
+        allMembers = Data.Success(result)
     }
 
     fun searchMember(searchText: String) {
-        val result = _members.filter { it.member.name.contains(searchText) }
-        members = Data.Success(result)
+        val result = _members.filter { it.participant.name.contains(searchText) }
+        allMembers = Data.Success(result)
     }
 
-    fun setMemberSelected(id: Int, selected: Boolean) {
-        val selectedMemberIndex = _members.indexOfFirst { it.member.id == id }
+    fun setMemberSelected(id: Long, selected: Boolean) {
+        val selectedMemberIndex = _members.indexOfFirst { it.participant.id == id }
         if (selectedMemberIndex != -1) {
             _members[selectedMemberIndex].selected = selected
         }
-        members = Data.Success(_members)
+        allMembers = Data.Success(_members)
     }
 
     fun onChitFundDataInput() {
@@ -92,11 +94,12 @@ class ChitFundVm @Inject constructor(var fundRepository: FundRepository) : ViewM
     }
 
     fun onMembersSelected() {
-        chitFundData?.members = _members.filter { it.selected }.map { it.member }
+        chitFundData?.participants = _members.filter { it.selected }.map { it.participant }
+        saveChitFund()
     }
 
-    fun onSkipMemberSelection() {
-        //save chitFundData to DB
+    fun addContribution() {
+
     }
 }
 
@@ -117,6 +120,7 @@ data class ChitFund(
     var meetingFrequency: Frequency,
     var loanSettings: LoanSettings? = null,
     var fineForAbsence: Double = 0.0,
+    var participants: List<Participant> = emptyList(),
     var members: List<Member> = emptyList(),
     var fundMetaData: ChitFundMetaData? = null
 )
@@ -142,10 +146,28 @@ data class LoanSettings(
     var loanFrequency: Frequency,
 )
 
-data class Member(var id: Int, var name: String, var chitsToAdd: Int, var currentChits: Int = 0)
-data class MembersUiState(val member: Member, var selected: Boolean)
+data class Participant(
+    var id: Long,
+    var name: String,
+    var chitsToAdd: Int,
+    var currentChits: Int = 0
+)
 
-fun List<MembersUiState>.getTotalCount() = this.sumOf { it.member.chitsToAdd }
+data class Member(
+    val memberId: Long,
+    val fundId: Long,
+    val memberName: String,
+    val fundName: String,
+    val chitNumber: Long,
+    val finePending: Double? = 0.0,
+    val loanPending: Double? = 0.0,
+    val loanInterestPending: Double? = 0.0,
+    val premiumPending: Double? = 0.0,
+)
+
+data class MembersUiState(val participant: Participant, var selected: Boolean)
+
+fun List<MembersUiState>.getTotalCount() = this.sumOf { it.participant.chitsToAdd }
 
 data class FrequencyUiState(val frequency: Frequency, var selected: Boolean)
 
@@ -158,3 +180,11 @@ enum class Frequency(val frequency: String) {
     WEEK("week"),
     MONTH("week");
 }
+
+data class Contribution(
+    var participant: Participant,
+    var premium: Double,
+    var loanCapital: Double = 0.0,
+    var loanInterest: Double = 0.0,
+    var fine: Double = 0.0,
+)

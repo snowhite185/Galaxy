@@ -35,7 +35,7 @@ class AddNewChitActivity : ComponentActivity() {
                             chitFundInputData,
                             onNextClicked = { viewModel.onChitFundDataInput() },
                         )
-                        val memberData = viewModel.members
+                        val memberData = viewModel.allMembers
                         MembersList(memberData)
                     }
                 }
@@ -61,7 +61,7 @@ fun MembersList(members: Data<List<MembersUiState>>) {
         is Data.Success<List<MembersUiState>> -> {
             for (item in members.data!!) {
                 val color = if (item.selected) Color.Blue else Color.Black
-                Text(text = "name: ${item.member.name}, chits: ${item.member.currentChits}", color = color)
+                Text(text = "name: ${item.participant.name}, chits: ${item.participant.currentChits}", color = color)
             }
         }
     }
