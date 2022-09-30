@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.galaxy.chitfund.db.ChitFundDao
+import com.example.galaxy.chitfund.db.ChitFundInfo
 import com.example.galaxy.chitfund.db.MemberMapping
 import com.example.galaxy.chitfund.db.MemberMappingDao
 import com.example.galaxy.data.dao.AttendanceDao
@@ -11,12 +13,16 @@ import com.example.galaxy.data.dao.MembersDao
 import com.example.galaxy.data.entity.Attendance
 import com.example.galaxy.data.entity.MemberInfo
 
-@Database(entities = [Attendance::class, MemberInfo::class, MemberMapping::class], version = 1)
+@Database(
+    entities = [Attendance::class, MemberInfo::class, MemberMapping::class, ChitFundInfo::class],
+    version = 1
+)
 abstract class GalaxyDatabase : RoomDatabase() {
 
     abstract fun attendanceDao(): AttendanceDao
     abstract fun membersDao(): MembersDao
     abstract fun membersMappingDao(): MemberMappingDao
+    abstract fun chitFundDao(): ChitFundDao
 
     companion object {
 

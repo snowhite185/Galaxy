@@ -31,7 +31,7 @@ interface MemberMappingDao {
     @Query(
         "select table_members.id,table_members.name, " +
                 "count(table_members_mapping.chit_number) as chitCount from table_members " +
-                "join table_members_mapping on table_members.id = table_members_mapping.member_id " +
+                "left join table_members_mapping on table_members.id = table_members_mapping.member_id " +
                 "group by table_members.id"
     )
     fun getMemberChits(): List<MemberAndChitInfo>
@@ -41,6 +41,9 @@ interface MemberMappingDao {
 
     @Query("delete from table_members_mapping")
     fun deleteAll()
+
+    @Query("select max(chit_number) from table_members_mapping")
+    fun getMaxChitNumber(): Int
 }
 
 data class MemberAndChitInfo(

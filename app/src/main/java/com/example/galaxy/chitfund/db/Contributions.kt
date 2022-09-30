@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "table_contributions")
 data class Contributions(
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0,
+    var id: Long = 0,
 
     @ColumnInfo(name = "chit_number")
     var chitNumber: Int,

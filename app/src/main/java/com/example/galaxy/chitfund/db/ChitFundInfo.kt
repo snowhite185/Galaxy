@@ -2,12 +2,16 @@ package com.example.galaxy.chitfund.db
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "table_chit_fund")
+@Entity(
+    tableName = "table_chit_fund",
+    indices = [Index(value = ["name"], unique = true)]
+)
 data class ChitFundInfo(
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0,
+    var id: Long = 0,
 
     @ColumnInfo(name = "name")
     var name: String,

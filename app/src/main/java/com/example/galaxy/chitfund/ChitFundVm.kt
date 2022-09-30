@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ChitFundVm @Inject constructor(var memberRepository: MemberRepository) : ViewModel() {
+class ChitFundVm @Inject constructor(var fundRepository: FundRepository) : ViewModel() {
 
     var chitFundInputData = ChitFundInput()
     private var chitFundData: ChitFund? = null
@@ -30,9 +30,25 @@ class ChitFundVm @Inject constructor(var memberRepository: MemberRepository) : V
         loanFrequency = meetingFrequency.map { it.copy() }
     }
 
+    fun saveChitFund() {
+        viewModelScope.launch(Dispatchers.IO) {
+            chitFundData?.let { fundRepository.saveChitFund(it) }
+        }
+    }
+
     fun getMembers() {
         viewModelScope.launch(Dispatchers.IO) {
-            memberRepository.getAllMembers()
+            fundRepository.saveChitFund(
+                ChitFund(
+                    name = "Club chit 100",
+                    premium = 100.0,
+                    duration = 60,
+                    meetingFrequency = Frequency.WEEK,
+                    loanSettings = LoanSettings(interest = 1.0, loanFrequency = Frequency.WEEK),
+                    fineForAbsence = 10.0
+                )
+            )
+            fundRepository.getAllMembers()
                 .catch {
                     members = Data.Error()
                 }.collect { list ->
@@ -106,19 +122,19 @@ data class ChitFund(
 )
 
 data class ChitFundMetaData(
-    var id: Int,
-    var meetingCount: Int,
-    var totalFineCollected: Double,
-    var totalLoanInterestCollected: Double,
-    var totalLoanGiven: Double,
-    var totalDividendGiven: Double,
+    var id: Long,
+    var meetingCount: Int = 0,
+    var totalFineCollected: Double = 0.0,
+    var totalLoanInterestCollected: Double = 0.0,
+    var totalLoanGiven: Double = 0.0,
+    var totalDividendGiven: Double = 0.0,
     var totalDividendToGive: Double = 0.0,
     var dividendPerMember: Double = 0.0,
-    var availableAmount: Double,
-    var startDate: String,
-    var endDate: String,
-    var premiumExpectedInUpcomingMeeting: Double,
-    var fineExpectedInUpcomingMeeting: Double,
+    var availableAmount: Double = 0.0,
+    var startDate: String = "",
+    var endDate: String = "",
+    var premiumExpectedInUpcomingMeeting: Double = 0.0,
+    var fineExpectedInUpcomingMeeting: Double = 0.0,
 )
 
 data class LoanSettings(

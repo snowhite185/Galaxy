@@ -1,8 +1,7 @@
 package com.example.galaxy.di
 
-import com.example.galaxy.chitfund.MemberMockRepository
-import com.example.galaxy.chitfund.MemberRepository
-import com.example.galaxy.chitfund.MemberRepositoryImpl
+import com.example.galaxy.chitfund.FundRepository
+import com.example.galaxy.chitfund.FundRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -13,5 +12,5 @@ import dagger.hilt.components.SingletonComponent
 abstract class RepoModule {
 
     @Binds
-    abstract fun provideMembersRepo(repo: MemberRepositoryImpl): MemberRepository
+    abstract fun provideMembersRepo(repo: FundRepositoryImpl): FundRepository
 }

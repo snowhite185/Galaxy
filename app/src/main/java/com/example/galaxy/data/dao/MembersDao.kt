@@ -12,10 +12,19 @@ interface MembersDao {
     fun getAll(): List<MemberInfo>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(member: MemberInfo)
+    fun insert(member: MemberInfo): Long
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insert(member: List<MemberInfo>)
 
     @Query("select * from table_members where id=:id")
     fun get(id: Int): MemberInfo?
+
+    @Query("select * from table_members where name=:name")
+    fun getByName(name: String): MemberInfo?
+
+    @Query("select * from table_members where name in (:names)")
+    fun getAllByName(names: List<String>): List<MemberInfo>
 
     @Query("delete from table_members where id=:id")
     fun delete(id: Int)

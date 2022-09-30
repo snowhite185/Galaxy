@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ChitFundDao {
     @Insert
-    fun insert(fund: ChitFundInfo)
+    fun insert(fund: ChitFundInfo): Long
 
     @Query("select * from table_chit_fund")
     fun getAll(): Flow<List<ChitFundInfo>>

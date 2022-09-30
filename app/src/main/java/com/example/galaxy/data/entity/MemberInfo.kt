@@ -8,8 +8,8 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "table_members", indices = [Index(value = ["name"], unique = true)])
 data class MemberInfo(
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0,
+    var id: Long = 0,
 
-    @ColumnInfo(name = "name")
+    @ColumnInfo(name = "name", collate = ColumnInfo.NOCASE)
     var name: String
 )

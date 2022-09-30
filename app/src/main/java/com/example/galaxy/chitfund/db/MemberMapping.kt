@@ -11,14 +11,14 @@ import androidx.room.PrimaryKey
 )
 data class MemberMapping(
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0,
+    var id: Long = 0,
 
     @ColumnInfo(name = "member_id")
-    var memberId: Int,
+    var memberId: Long,
 
     @ColumnInfo(name = "fund_id")
-    var fundId: Int,
+    var fundId: Long,
 
     @ColumnInfo(name = "chit_number")
-    var chitNumber: Int,
+    var chitNumber: Long,
 )
