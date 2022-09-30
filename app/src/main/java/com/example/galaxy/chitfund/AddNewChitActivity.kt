@@ -61,7 +61,7 @@ fun MembersList(members: Data<List<MembersUiState>>) {
         is Data.Success<List<MembersUiState>> -> {
             for (item in members.data!!) {
                 val color = if (item.selected) Color.Blue else Color.Black
-                Text(text = item.member.name, color = color)
+                Text(text = "name: ${item.member.name}, chits: ${item.member.currentChits}", color = color)
             }
         }
     }

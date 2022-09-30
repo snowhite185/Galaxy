@@ -3,18 +3,18 @@ package com.example.galaxy.dashboard
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.galaxy.data.entity.Members
+import com.example.galaxy.data.entity.MemberInfo
 import com.example.galaxy.databinding.LayoutMembersListItemBinding
 
 class MembersListAdapter :
     RecyclerView.Adapter<MembersListAdapter.ViewHolder>() {
 
-    private var mList = ArrayList<Members>()
+    private var mList = ArrayList<MemberInfo>()
 
     class ViewHolder(private val binding: LayoutMembersListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun setData(data: Members) {
+        fun setData(data: MemberInfo) {
             binding.itemData = data
         }
     }
@@ -34,7 +34,7 @@ class MembersListAdapter :
     }
 
     // TODO: replace with ListAdapter to avoid this
-    fun setData(data: List<Members>) {
+    fun setData(data: List<MemberInfo>) {
         mList.clear()
         mList.addAll(data)
         notifyDataSetChanged()

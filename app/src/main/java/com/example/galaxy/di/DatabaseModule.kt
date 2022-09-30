@@ -1,9 +1,10 @@
 package com.example.galaxy.di
 
 import android.content.Context
+import com.example.galaxy.chitfund.db.MemberMappingDao
+import com.example.galaxy.data.GalaxyDatabase
 import com.example.galaxy.data.dao.AttendanceDao
 import com.example.galaxy.data.dao.MembersDao
-import com.example.galaxy.data.GalaxyDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,6 +24,11 @@ class DatabaseModule {
     @Provides
     fun provideMembersDao(appDatabase: GalaxyDatabase): MembersDao {
         return appDatabase.membersDao()
+    }
+
+    @Provides
+    fun provideMemberMappingDao(appDatabase: GalaxyDatabase): MemberMappingDao {
+        return appDatabase.membersMappingDao()
     }
 
     @Provides

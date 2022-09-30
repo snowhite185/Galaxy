@@ -9,8 +9,8 @@ class MemberMockRepository @Inject constructor() : MemberRepository {
 
     override suspend fun getAllMembers(): Flow<List<Member>> {
         val value = listOf(
-            Member(id = 0, name = "Emil", count = 0),
-            Member(id = 1, name = "Anusha", count = 0, fundCount = 4)
+            Member(id = 0, name = "Emil", chitsToAdd = 0),
+            Member(id = 1, name = "Anusha", chitsToAdd = 0, currentChits = 4)
         )
         return flow {
             delay(2000)

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.galaxy.utils.Data
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -30,7 +31,7 @@ class ChitFundVm @Inject constructor(var memberRepository: MemberRepository) : V
     }
 
     fun getMembers() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             memberRepository.getAllMembers()
                 .catch {
                     members = Data.Error()
@@ -125,10 +126,10 @@ data class LoanSettings(
     var loanFrequency: Frequency,
 )
 
-data class Member(var id: Int, var name: String, var count: Int, var fundCount: Int = 0)
+data class Member(var id: Int, var name: String, var chitsToAdd: Int, var currentChits: Int = 0)
 data class MembersUiState(val member: Member, var selected: Boolean)
 
-fun List<MembersUiState>.getTotalCount() = this.sumOf { it.member.count }
+fun List<MembersUiState>.getTotalCount() = this.sumOf { it.member.chitsToAdd }
 
 data class FrequencyUiState(val frequency: Frequency, var selected: Boolean)
 

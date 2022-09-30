@@ -1,4 +1,4 @@
-package com.example.galaxy.chitfund.entity
+package com.example.galaxy.chitfund.db
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

@@ -1,4 +1,4 @@
-package com.example.galaxy.chitfund.entity
+package com.example.galaxy.chitfund.db
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -9,8 +9,8 @@ data class Contributions(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
 
-    @ColumnInfo(name = "chittal_id")
-    var chittalId: Int,
+    @ColumnInfo(name = "chit_number")
+    var chitNumber: Int,
 
     @ColumnInfo(name = "chit_fund_id")
     var chitFundId: Int,
