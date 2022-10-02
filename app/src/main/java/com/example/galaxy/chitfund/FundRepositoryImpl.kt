@@ -70,9 +70,9 @@ class FundRepositoryImpl @Inject constructor(
                 fineForAbsence = it.fineForAbsence,
                 loanSettings = LoanSettings(
                     interest = it.loanInterest,
-                    loanFrequency = Frequency.valueOf(it.loanPaymentFrequency)
+                    loanFrequency = Frequency.asFrequency(it.loanPaymentFrequency)!!
                 ),
-                meetingFrequency = Frequency.valueOf(it.meetingFreq),
+                meetingFrequency = Frequency.asFrequency(it.meetingFreq)!!,
                 duration = it.duration,
                 premium = it.premium,
                 members = memberInfo.map { info ->

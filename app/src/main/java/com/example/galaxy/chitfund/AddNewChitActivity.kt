@@ -6,6 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -29,19 +31,62 @@ class AddNewChitActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
                     println("Rendering: AddNewChitActivity")
-                    Column {
+                    val state = rememberScrollState()
+                    Column(modifier = Modifier.verticalScroll(state)) {
                         val chitFundInputData = viewModel.chitFundInputData
                         InputForm(
                             chitFundInputData,
                             onNextClicked = { viewModel.onChitFundDataInput() },
                         )
                         val memberData = viewModel.allMembers
-                        MembersList(memberData)
+                        val allFunds = viewModel.allFunds
+                        val members = viewModel.membersInFund
+                        val selectedFund = viewModel.selectedFund
+                        //MembersList(memberData)
+                        //ChitList(allFunds)
+                        ChitMembers(members, selectedFund)
                     }
                 }
             }
         }
         viewModel.getMembers()
+        viewModel.getAllFunds()
+        viewModel.onFundSelected(1)
+    }
+}
+
+@Composable
+fun ChitMembers(members: List<Member>, selectedFund: ChitFund?) {
+    println("Rendering: ChitMembers")
+    Text(text = "------Members in the Chit-------")
+    members.forEachIndexed { pos, member ->
+        Text(text = "Item $pos ----")
+        Text(text = "Name: ${member.memberName}")
+        Text(text = "Chit number: ${member.chitNumber}")
+        Text(text = "Fund name: ${selectedFund?.name}")
+    }
+}
+
+@Composable
+fun ChitList(allFunds: List<ChitFund>) {
+    println("Rendering: ChitList")
+    Text(text = "------Chits-------")
+    for (i in allFunds.indices) {
+        val fund = allFunds[i]
+        Text(text = "Item $i ----")
+        Text(text = "Name: ${fund.name}")
+        Text(text = "Start date: ${fund.fundMetaData?.startDate}")
+        Text(text = "Premium: ${fund.premium}")
+        Text(text = "Members: ${fund.members.size}")
+        Text(text = "Duration: ${fund.duration} - ${fund.meetingFrequency}")
+        Text(text = "Fine: ${fund.fineForAbsence}")
+        Text(text = "Total dividend: ${fund.fundMetaData?.totalDividendGiven}")
+        Text(text = "Loan took: ${fund.fundMetaData?.totalLoanGiven}")
+        Text(text = "Interest collected: ${fund.fundMetaData?.totalLoanInterestCollected}")
+        Text(text = "Loan interest: ${fund.loanSettings?.interest} per ${fund.loanSettings?.loanFrequency}")
+        Text(text = "End date: ${fund.fundMetaData?.endDate}")
+        Text(text = "Meeting count: ${fund.fundMetaData?.meetingCount}")
+        Text(text = "-------------")
     }
 }
 
@@ -50,18 +95,20 @@ fun MembersList(members: Data<List<MembersUiState>>) {
     println("Rendering: MembersList")
 
     when (members) {
-        is Data.Error ->
-            Column {
-                Text(text = "Something went wring.")
-                Button(onClick = { /*TODO*/ }) { Text(text = "Retry") }
-            }
+        is Data.Error -> Column {
+            Text(text = "Something went wring.")
+            Button(onClick = { /*TODO*/ }) { Text(text = "Retry") }
+        }
         is Data.Loading -> Column {
             Text(text = "Loading, please wait")
         }
         is Data.Success<List<MembersUiState>> -> {
             for (item in members.data!!) {
                 val color = if (item.selected) Color.Blue else Color.Black
-                Text(text = "name: ${item.participant.name}, chits: ${item.participant.currentChits}", color = color)
+                Text(
+                    text = "name: ${item.participant.name}, chits: ${item.participant.currentChits}",
+                    color = color
+                )
             }
         }
     }

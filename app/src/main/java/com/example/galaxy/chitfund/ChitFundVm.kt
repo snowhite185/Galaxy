@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.galaxy.utils.Data
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,13 +18,12 @@ class ChitFundVm @Inject constructor(var fundRepository: FundRepository) : ViewM
 
     var chitFundInputData = ChitFundInput()
     private var chitFundData: ChitFund? = null
-
+    var selectedFund by mutableStateOf<ChitFund?>(null)
     var allMembers: Data<List<MembersUiState>> by mutableStateOf(Data.Loading())
-    private var _members = ArrayList<MembersUiState>()
-
+    var membersInFund: List<Member> by mutableStateOf(emptyList())
+    private var _allMembers = ArrayList<MembersUiState>()
     var meetingFrequencies: List<FrequencyUiState> by mutableStateOf(emptyList())
     var loanFrequencies: List<FrequencyUiState> by mutableStateOf(emptyList())
-
     var allFunds: List<ChitFund> by mutableStateOf(emptyList())
 
     init {
@@ -44,6 +44,14 @@ class ChitFundVm @Inject constructor(var fundRepository: FundRepository) : ViewM
         }
     }
 
+    fun onFundSelected(fundId: Long) {
+        viewModelScope.launch {
+            delay(2000)
+            selectedFund = allFunds.find { it.fundMetaData?.id == fundId }
+            membersInFund = selectedFund?.members ?: emptyList()
+        }
+    }
+
     fun onSkipMemberSelection() {
         saveChitFund()
     }
@@ -55,28 +63,28 @@ class ChitFundVm @Inject constructor(var fundRepository: FundRepository) : ViewM
                     allMembers = Data.Error()
                 }.collect { list ->
                     val data = list.map { MembersUiState(it, false) }
-                    _members.addAll(data)
-                    allMembers = Data.Success(_members)
+                    _allMembers.addAll(data)
+                    allMembers = Data.Success(_allMembers)
                 }
         }
     }
 
     fun getSelectedMembers() {
-        val result = _members.filter { it.selected }
+        val result = _allMembers.filter { it.selected }
         allMembers = Data.Success(result)
     }
 
     fun searchMember(searchText: String) {
-        val result = _members.filter { it.participant.name.contains(searchText) }
+        val result = _allMembers.filter { it.participant.name.contains(searchText) }
         allMembers = Data.Success(result)
     }
 
     fun setMemberSelected(id: Long, selected: Boolean) {
-        val selectedMemberIndex = _members.indexOfFirst { it.participant.id == id }
+        val selectedMemberIndex = _allMembers.indexOfFirst { it.participant.id == id }
         if (selectedMemberIndex != -1) {
-            _members[selectedMemberIndex].selected = selected
+            _allMembers[selectedMemberIndex].selected = selected
         }
-        allMembers = Data.Success(_members)
+        allMembers = Data.Success(_allMembers)
     }
 
     fun onChitFundDataInput() {
@@ -94,7 +102,7 @@ class ChitFundVm @Inject constructor(var fundRepository: FundRepository) : ViewM
     }
 
     fun onMembersSelected() {
-        chitFundData?.participants = _members.filter { it.selected }.map { it.participant }
+        chitFundData?.participants = _allMembers.filter { it.selected }.map { it.participant }
         saveChitFund()
     }
 
@@ -178,7 +186,13 @@ fun Frequency.format(pre: String = "", post: String = ""): String {
 enum class Frequency(val frequency: String) {
     DAY("day"),
     WEEK("week"),
-    MONTH("week");
+    MONTH("month");
+
+    companion object {
+        fun asFrequency(frequency: String): Frequency? {
+            return values().find { it.frequency == frequency }
+        }
+    }
 }
 
 data class Contribution(
