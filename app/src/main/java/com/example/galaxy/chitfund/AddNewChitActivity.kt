@@ -42,9 +42,13 @@ class AddNewChitActivity : ComponentActivity() {
                         val allFunds = viewModel.allFunds
                         val members = viewModel.membersInFund
                         val selectedFund = viewModel.selectedFund
+                        val contribution = viewModel.contribution
                         //MembersList(memberData)
                         //ChitList(allFunds)
-                        ChitMembers(members, selectedFund)
+                        //ChitMembers(members, selectedFund)
+                        Contribution(contribution,
+                            { viewModel.nextMember() },
+                            { viewModel.prevMember() })
                     }
                 }
             }
@@ -52,6 +56,29 @@ class AddNewChitActivity : ComponentActivity() {
         viewModel.getMembers()
         viewModel.getAllFunds()
         viewModel.onFundSelected(1)
+    }
+}
+
+@Composable
+fun Contribution(data: ContributionInput?, next: () -> Unit, prev: () -> Unit) {
+    if (data == null) return
+    println("Rendering: Contribution")
+    Text(text = "------Contributions-------")
+    Text(text = "Member ${data.memberIndex} ----")
+    Text(text = "Chit Number: ${data.chitNumber}")
+    Text(text = "Date: ${data.date}")
+    Text(text = "Premium: ${data.premium}")
+    Text(text = "Loan capital: ${data.loanCapital}")
+    Text(text = "Loan interest: ${data.loanInterest}")
+    Text(text = "Fine: ${data.fine}")
+    Text(text = "Member present: ${data.memberPresent}")
+    Text(text = "Next enabled: ${data.nextEnabled}")
+    Text(text = "Prev enabled: ${data.prevEnabled}")
+    Button(onClick = { next() }, enabled = data.nextEnabled) {
+        Text(text = "NEXT")
+    }
+    Button(onClick = { prev() }, enabled = data.prevEnabled) {
+        Text(text = "PREV")
     }
 }
 

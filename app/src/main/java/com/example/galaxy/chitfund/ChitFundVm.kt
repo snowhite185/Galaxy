@@ -21,6 +21,9 @@ class ChitFundVm @Inject constructor(var fundRepository: FundRepository) : ViewM
     var selectedFund by mutableStateOf<ChitFund?>(null)
     var allMembers: Data<List<MembersUiState>> by mutableStateOf(Data.Loading())
     var membersInFund: List<Member> by mutableStateOf(emptyList())
+    var contribution by mutableStateOf<ContributionInput?>(null)
+    private var contributionIndex = 0
+    private var contributions = ArrayList<ContributionInput>()
     private var _allMembers = ArrayList<MembersUiState>()
     var meetingFrequencies: List<FrequencyUiState> by mutableStateOf(emptyList())
     var loanFrequencies: List<FrequencyUiState> by mutableStateOf(emptyList())
@@ -49,6 +52,7 @@ class ChitFundVm @Inject constructor(var fundRepository: FundRepository) : ViewM
             delay(2000)
             selectedFund = allFunds.find { it.fundMetaData?.id == fundId }
             membersInFund = selectedFund?.members ?: emptyList()
+            prepareContributionList()
         }
     }
 
@@ -101,13 +105,45 @@ class ChitFundVm @Inject constructor(var fundRepository: FundRepository) : ViewM
         )
     }
 
-    fun onMembersSelected() {
+    fun onMembersSelectionComplete() {
         chitFundData?.participants = _allMembers.filter { it.selected }.map { it.participant }
         saveChitFund()
     }
 
-    fun addContribution() {
+    private fun prepareContributionList() {
+        membersInFund.forEachIndexed { index, member ->
+            selectedFund?.let { fund ->
+                val input = ContributionInput()
+                input.chitNumber = member.chitNumber.toString()
+                input.memberName = member.memberName
+                input.fundName = fund.name
+                input.date = ""
+                input.memberIndex = "$index"
+                input.premium = fund.premium.toString()
+                input.loanCapital = ""
+                input.loanInterest = ""
+                input.fine = ""
+                input.memberPresent = true
+                contributions.add(input)
+            }
+        }
+        contribution = contributions[0]
+    }
 
+    fun prevMember() {
+        if (contributionIndex <= 0) return
+        contributionIndex--
+        contribution = contributions[contributionIndex]
+        contribution?.nextEnabled = contributionIndex < contributions.lastIndex
+        contribution?.prevEnabled = contributionIndex > 0
+    }
+
+    fun nextMember() {
+        if (contributionIndex >= contributions.lastIndex) return
+        contributionIndex++
+        contribution = contributions[contributionIndex]
+        contribution?.prevEnabled = contributionIndex > 0
+        contribution?.nextEnabled = contributionIndex < contributions.lastIndex
     }
 }
 
@@ -195,9 +231,24 @@ enum class Frequency(val frequency: String) {
     }
 }
 
+class ContributionInput {
+    var memberName by mutableStateOf("")
+    var fundName by mutableStateOf("")
+    var chitNumber by mutableStateOf("")
+    var date by mutableStateOf("")
+    var memberIndex by mutableStateOf("")
+    var premium by mutableStateOf("")
+    var loanCapital by mutableStateOf("")
+    var loanInterest by mutableStateOf("")
+    var fine by mutableStateOf("")
+    var memberPresent by mutableStateOf(false)
+    var prevEnabled by mutableStateOf(false)
+    var nextEnabled by mutableStateOf(true)
+}
+
 data class Contribution(
-    var participant: Participant,
-    var premium: Double,
+    var memberName: Member,
+    var premium: Double? = null,
     var loanCapital: Double = 0.0,
     var loanInterest: Double = 0.0,
     var fine: Double = 0.0,
