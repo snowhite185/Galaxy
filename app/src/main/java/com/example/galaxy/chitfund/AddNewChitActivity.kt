@@ -64,7 +64,8 @@ fun Contribution(data: ContributionInput?, next: () -> Unit, prev: () -> Unit) {
     if (data == null) return
     println("Rendering: Contribution")
     Text(text = "------Contributions-------")
-    Text(text = "Member ${data.memberIndex} ----")
+    Text(text = "Member: ${data.memberName}")
+    Text(text = "Member index: ${data.memberIndex} / ${data.totalMembers}")
     Text(text = "Chit Number: ${data.chitNumber}")
     Text(text = "Date: ${data.date}")
     Text(text = "Premium: ${data.premium}")

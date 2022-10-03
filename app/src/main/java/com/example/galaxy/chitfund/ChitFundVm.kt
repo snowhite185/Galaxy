@@ -111,8 +111,8 @@ class ChitFundVm @Inject constructor(var fundRepository: FundRepository) : ViewM
     }
 
     private fun prepareContributionList() {
-        membersInFund.forEachIndexed { index, member ->
-            selectedFund?.let { fund ->
+        selectedFund?.let { fund ->
+            fund.members.forEachIndexed { index, member ->
                 val input = ContributionInput()
                 input.chitNumber = member.chitNumber.toString()
                 input.memberName = member.memberName
@@ -124,6 +124,7 @@ class ChitFundVm @Inject constructor(var fundRepository: FundRepository) : ViewM
                 input.loanInterest = ""
                 input.fine = ""
                 input.memberPresent = true
+                input.totalMembers = fund.members.size.toString()
                 contributions.add(input)
             }
         }
@@ -237,6 +238,7 @@ class ContributionInput {
     var chitNumber by mutableStateOf("")
     var date by mutableStateOf("")
     var memberIndex by mutableStateOf("")
+    var totalMembers by mutableStateOf("")
     var premium by mutableStateOf("")
     var loanCapital by mutableStateOf("")
     var loanInterest by mutableStateOf("")
