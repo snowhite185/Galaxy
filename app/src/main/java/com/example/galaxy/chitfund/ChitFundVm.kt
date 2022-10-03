@@ -11,6 +11,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.TextStyle
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -111,13 +114,15 @@ class ChitFundVm @Inject constructor(var fundRepository: FundRepository) : ViewM
     }
 
     private fun prepareContributionList() {
+        val today = today()
+        contributions.clear()
         selectedFund?.let { fund ->
             fund.members.forEachIndexed { index, member ->
                 val input = ContributionInput()
                 input.chitNumber = member.chitNumber.toString()
                 input.memberName = member.memberName
                 input.fundName = fund.name
-                input.date = ""
+                input.date = today
                 input.memberIndex = "$index"
                 input.premium = fund.premium.toString()
                 input.loanCapital = ""
@@ -129,6 +134,16 @@ class ChitFundVm @Inject constructor(var fundRepository: FundRepository) : ViewM
             }
         }
         contribution = contributions[0]
+    }
+
+    private val today = {
+        val now = LocalDate.now()
+        val default = Locale.getDefault()
+        val textStyle = TextStyle.FULL
+        val week = now.dayOfWeek.getDisplayName(textStyle, default)
+        val day = now.dayOfMonth
+        val month = now.month.getDisplayName(textStyle, default)
+        "$week $day $month"
     }
 
     fun prevMember() {
@@ -145,6 +160,10 @@ class ChitFundVm @Inject constructor(var fundRepository: FundRepository) : ViewM
         contribution = contributions[contributionIndex]
         contribution?.prevEnabled = contributionIndex > 0
         contribution?.nextEnabled = contributionIndex < contributions.lastIndex
+    }
+
+    fun finishContribution() {
+
     }
 }
 
