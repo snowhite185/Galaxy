@@ -33,4 +33,8 @@ class FundMockRepository @Inject constructor() : FundRepository {
     override suspend fun getAllChits(): List<ChitFund> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun saveContribution() {
+        TODO("Not yet implemented")
+    }
 }

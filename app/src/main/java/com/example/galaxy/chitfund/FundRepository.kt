@@ -13,4 +13,6 @@ interface FundRepository {
     suspend fun addMembers(fundId: Long, members: List<Participant>)
 
     suspend fun getAllChits(): List<ChitFund>
+
+    suspend fun saveContribution()
 }

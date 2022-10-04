@@ -129,6 +129,7 @@ class ChitFundVm @Inject constructor(var fundRepository: FundRepository) : ViewM
                 input.loanInterest = ""
                 input.fine = ""
                 input.memberPresent = true
+                input.meetingIndex = selectedFund?.fundMetaData?.meetingCount?.toString() ?: ""
                 input.totalMembers = fund.members.size.toString()
                 contributions.add(input)
             }
@@ -163,7 +164,21 @@ class ChitFundVm @Inject constructor(var fundRepository: FundRepository) : ViewM
     }
 
     fun finishContribution() {
-
+        val fundId = selectedFund?.fundMetaData?.id ?: return
+        val now = Calendar.getInstance().timeInMillis
+        contributions.map {
+            Contribution(
+                chitNumber = it.chitNumber.toInt(),
+                fundId = fundId,
+                amountPaid = it.premium.toDouble(),
+                date = now,
+                finePaid = it.fine.toDouble(),
+                loanCapitalPaid = it.loanCapital.toDouble(),
+                loanInterestPaid = it.loanInterest.toDouble(),
+                memberPresent = it.memberPresent,
+                meetingCount = it.meetingIndex.toInt() + 1
+            )
+        }
     }
 }
 
@@ -252,6 +267,7 @@ enum class Frequency(val frequency: String) {
 }
 
 class ContributionInput {
+    var meetingIndex by mutableStateOf("")
     var memberName by mutableStateOf("")
     var fundName by mutableStateOf("")
     var chitNumber by mutableStateOf("")
@@ -268,9 +284,13 @@ class ContributionInput {
 }
 
 data class Contribution(
-    var memberName: Member,
-    var premium: Double? = null,
-    var loanCapital: Double = 0.0,
-    var loanInterest: Double = 0.0,
-    var fine: Double = 0.0,
+    val chitNumber: Int,
+    val fundId: Long,
+    val date: Long,
+    val meetingCount: Int,
+    val amountPaid: Double,
+    val finePaid: Double,
+    val loanInterestPaid: Double,
+    val memberPresent: Boolean,
+    val loanCapitalPaid: Double,
 )

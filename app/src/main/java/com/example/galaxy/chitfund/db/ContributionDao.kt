@@ -22,4 +22,7 @@ interface ContributionDao {
 
     @Query("delete from table_contributions")
     fun deleteAll()
+
+    @Query("select max(meeting_count) from table_contributions where chit_fund_id=:fundId")
+    fun getMeetingCount(fundId: Long): Int
 }

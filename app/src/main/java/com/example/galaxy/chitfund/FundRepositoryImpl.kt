@@ -1,9 +1,6 @@
 package com.example.galaxy.chitfund
 
-import com.example.galaxy.chitfund.db.ChitFundDao
-import com.example.galaxy.chitfund.db.ChitFundInfo
-import com.example.galaxy.chitfund.db.MemberMapping
-import com.example.galaxy.chitfund.db.MemberMappingDao
+import com.example.galaxy.chitfund.db.*
 import com.example.galaxy.data.dao.MembersDao
 import com.example.galaxy.data.entity.MemberInfo
 import kotlinx.coroutines.flow.Flow
@@ -14,6 +11,7 @@ class FundRepositoryImpl @Inject constructor(
     private val memberDao: MembersDao,
     private val memberMappingDao: MemberMappingDao,
     private val chitFundDao: ChitFundDao,
+    private val contributionDao: ContributionDao,
 ) : FundRepository {
 
     override suspend fun getAllMembers(): Flow<List<Participant>> {
@@ -64,8 +62,12 @@ class FundRepositoryImpl @Inject constructor(
         val funds = chitFundDao.getAll()
         return funds.map {
             val memberInfo = chitFundDao.getMembers(it.id)
+            val meetingCount = contributionDao.getMeetingCount(it.id)
             ChitFund(
-                fundMetaData = ChitFundMetaData(id = it.id),
+                fundMetaData = ChitFundMetaData(
+                    id = it.id,
+                    meetingCount = meetingCount
+                ),
                 name = it.name,
                 fineForAbsence = it.fineForAbsence,
                 loanSettings = LoanSettings(
@@ -86,6 +88,10 @@ class FundRepositoryImpl @Inject constructor(
                 }
             )
         }
+    }
+
+    override suspend fun saveContribution() {
+
     }
 
     override suspend fun isMemberExists(name: String): Boolean {
