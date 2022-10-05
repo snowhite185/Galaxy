@@ -2,6 +2,7 @@ package com.example.galaxy.di
 
 import android.content.Context
 import com.example.galaxy.chitfund.db.ChitFundDao
+import com.example.galaxy.chitfund.db.ContributionDao
 import com.example.galaxy.chitfund.db.MemberMappingDao
 import com.example.galaxy.data.GalaxyDatabase
 import com.example.galaxy.data.dao.AttendanceDao
@@ -35,6 +36,11 @@ class DatabaseModule {
     @Provides
     fun provideMemberMappingDao(appDatabase: GalaxyDatabase): MemberMappingDao {
         return appDatabase.membersMappingDao()
+    }
+
+    @Provides
+    fun provideContributionDao(appDatabase: GalaxyDatabase): ContributionDao {
+        return appDatabase.contributionDao()
     }
 
     @Provides

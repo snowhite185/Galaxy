@@ -11,7 +11,7 @@ interface ContributionDao {
     @Insert
     fun insert(contribution: Contributions)
 
-    @Query("select * from table_chit_fund")
+    @Query("select * from table_contributions")
     fun getAll(): Flow<List<Contributions>>
 
     @Query("select * from table_contributions where id=:id")

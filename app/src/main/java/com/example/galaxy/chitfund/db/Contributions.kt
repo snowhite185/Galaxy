@@ -13,7 +13,7 @@ data class Contributions(
     var chitNumber: Int,
 
     @ColumnInfo(name = "chit_fund_id")
-    var chitFundId: Int,
+    var chitFundId: Long,
 
     @ColumnInfo(name = "date")
     var date: String,
