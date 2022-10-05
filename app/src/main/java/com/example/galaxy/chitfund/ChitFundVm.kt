@@ -134,7 +134,9 @@ class ChitFundVm @Inject constructor(var fundRepository: FundRepository) : ViewM
                 contributions.add(input)
             }
         }
-        contribution = contributions[0]
+        if (contributions.isNotEmpty()) {
+            contribution = contributions[0]
+        }
     }
 
     private val today = {

@@ -4,8 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
@@ -13,9 +12,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.galaxy.ui.theme.GalaxyTheme
 import com.example.galaxy.utils.Data
+import com.example.galaxy.utils.InputField
+import com.example.galaxy.utils.SectionDivider
+import com.example.galaxy.utils.TopHeaderView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,36 +32,63 @@ class AddNewChitActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             GalaxyTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-                    println("Rendering: AddNewChitActivity")
-                    val state = rememberScrollState()
-                    Column(modifier = Modifier.verticalScroll(state)) {
-                        val chitFundInputData = viewModel.chitFundInputData
-                        InputForm(
-                            chitFundInputData,
-                            onNextClicked = { viewModel.onChitFundDataInput() },
-                        )
-                        val memberData = viewModel.allMembers
-                        val allFunds = viewModel.allFunds
-                        val members = viewModel.membersInFund
-                        val selectedFund = viewModel.selectedFund
-                        val contribution = viewModel.contribution
-                        //MembersList(memberData)
-                        //ChitList(allFunds)
-                        //ChitMembers(members, selectedFund)
-                        Contribution(contribution,
-                            { viewModel.nextMember() },
-                            { viewModel.prevMember() })
-                    }
+                    val chitFundInputData = viewModel.chitFundInputData
+                    NewChitFundForm(
+                        data = chitFundInputData,
+                        onBackPressed = { finish() },
+                        next = {
+
+                        })
                 }
             }
         }
-        viewModel.getMembers()
-        viewModel.getAllFunds()
-        viewModel.onFundSelected(1)
+    }
+}
+
+@Composable
+fun NewChitFundForm(data: ChitFundInput, onBackPressed: () -> Unit, next: () -> Unit) {
+    TopHeaderView(
+        title = "Create new Chit fund",
+        onBackPressed = { onBackPressed() },
+    ) {
+        val scrollState = rememberScrollState()
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(20.dp)
+                .verticalScroll(scrollState)
+        ) {
+            Text(
+                text = "Please provide the following information to setup your chit fund",
+                fontSize = 16.sp
+            )
+            SectionDivider(topPadding = 20.dp)
+            ChitFundInputs(data = data, modifier = Modifier.padding(top = 20.dp))
+        }
+    }
+}
+
+@Composable
+fun ChitFundInputs(data: ChitFundInput, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.Top
+    ) {
+        InputField(
+            value = data.name,
+            onValueChange = { data.name = it },
+            label = "Enter a name for your chit fund",
+        )
+        InputField(
+            value = data.premium,
+            onValueChange = { data.premium = it },
+            label = "Enter the premium per member",
+            keyboardType = KeyboardType.Number,
+            imeAction = ImeAction.Done,
+            modifier = Modifier.padding(top = 10.dp)
+        )
     }
 }
 
@@ -168,9 +201,27 @@ fun InputForm(
 @Composable
 fun DefaultPreview() {
     GalaxyTheme {
-        InputForm(
-            ChitFundInput(),
-            onNextClicked = { },
-        )
+        NewChitFundForm(data = ChitFundInput(), onBackPressed = {}, next = {})
     }
 }
+
+//println("Rendering: AddNewChitActivity")
+//val state = rememberScrollState()
+//Column(modifier = Modifier.verticalScroll(state)) {
+//    val chitFundInputData = viewModel.chitFundInputData
+//    InputForm(
+//        chitFundInputData,
+//        onNextClicked = { viewModel.onChitFundDataInput() },
+//    )
+//    val memberData = viewModel.allMembers
+//    val allFunds = viewModel.allFunds
+//    val members = viewModel.membersInFund
+//    val selectedFund = viewModel.selectedFund
+//    val contribution = viewModel.contribution
+//    //MembersList(memberData)
+//    //ChitList(allFunds)
+//    //ChitMembers(members, selectedFund)
+//    Contribution(contribution,
+//        { viewModel.nextMember() },
+//        { viewModel.prevMember() })
+//}

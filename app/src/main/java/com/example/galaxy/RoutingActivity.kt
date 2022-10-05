@@ -40,10 +40,7 @@ class RoutingActivity : AppCompatActivity() {
                         LoginViewModel.States.SUCCESS ->
                             startActivity(Intent(this@RoutingActivity, HomeActivity::class.java))
                         else -> startActivity(
-                            Intent(
-                                this@RoutingActivity,
-                                LoginActivity::class.java
-                            )
+                            Intent(this@RoutingActivity, LoginActivity::class.java)
                         )
                     }
                     finish()
