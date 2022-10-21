@@ -11,9 +11,14 @@
         android:theme="@style/Theme.Galaxy">
         <activity
             android:name=".chitfund.AddNewChitActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_activity_add_new_chit"
             android:theme="@style/Theme.Galaxy">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -26,11 +31,7 @@
             android:name=".RoutingActivity"
             android:theme="@style/Theme.Galaxy.Splash"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".login.LoginActivity"

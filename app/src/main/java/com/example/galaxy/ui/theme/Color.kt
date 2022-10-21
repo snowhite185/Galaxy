@@ -10,6 +10,7 @@ val DarkBlue = Color(0xFF001737)
 val MediumBlue = Color(0xFF3849DE)
 val DarkGreen = Color(0xFF009432)
 val LightGrey = Color(0xFFD9D9D9)
+val DividerGrey = Color(0xFFADA5A5)
 
 var CardColor1 = Color(0xFF2B3693)
 var CardColor2 = Color(0xFFE3489C)
