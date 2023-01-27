@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.galaxy.R
 import com.example.galaxy.ui.theme.DividerGrey
 import com.example.galaxy.ui.theme.GalaxyTheme
@@ -56,7 +57,7 @@ class AddNewChitActivity : ComponentActivity() {
                         data = chitFundInputData,
                         onBackPressed = { finish() },
                         next = {
-
+                            viewModel.onChitFundDataInput()
                         })
                 }
             }
@@ -82,7 +83,8 @@ fun NewChitFundForm(data: ChitFundInput, onBackPressed: () -> Unit, next: () -> 
                 fontSize = 16.sp
             )
             SectionDivider(topPadding = 20.dp)
-            ChitFundInputs(data = data, modifier = Modifier.padding(top = 20.dp))
+            InputForm(data = data, onNextClicked = next )
+//            ChitFundInputs(data = data, modifier = Modifier.padding(top = 20.dp))
         }
     }
 }
