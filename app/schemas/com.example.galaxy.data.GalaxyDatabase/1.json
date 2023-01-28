@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "34e10207c9ff832623e565e99aa65c52",
+    "identityHash": "3fdc90218480bf2966549bc9b188ad92",
     "entities": [
       {
         "tableName": "attendance_table",
@@ -34,17 +34,17 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": true,
           "columnNames": [
             "id"
-          ],
-          "autoGenerate": true
+          ]
         },
         "indices": [],
         "foreignKeys": []
       },
       {
-        "tableName": "members_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL)",
+        "tableName": "table_members",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL COLLATE NOCASE)",
         "fields": [
           {
             "fieldPath": "id",
@@ -60,10 +60,270 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": true,
           "columnNames": [
             "id"
-          ],
-          "autoGenerate": true
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_table_members_name",
+            "unique": true,
+            "columnNames": [
+              "name"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_table_members_name` ON `${TABLE_NAME}` (`name`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "table_members_mapping",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `member_id` INTEGER NOT NULL, `fund_id` INTEGER NOT NULL, `chit_number` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "memberId",
+            "columnName": "member_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fundId",
+            "columnName": "fund_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "chitNumber",
+            "columnName": "chit_number",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_table_members_mapping_member_id_fund_id_chit_number",
+            "unique": true,
+            "columnNames": [
+              "member_id",
+              "fund_id",
+              "chit_number"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_table_members_mapping_member_id_fund_id_chit_number` ON `${TABLE_NAME}` (`member_id`, `fund_id`, `chit_number`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "table_chit_fund",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `duration` INTEGER NOT NULL, `meeting_freq` TEXT NOT NULL, `loan_allowed` INTEGER NOT NULL, `loan_interest` REAL NOT NULL, `loan_payment_frequency` TEXT NOT NULL, `fine_absence` REAL NOT NULL, `start_date` TEXT NOT NULL, `end_date` TEXT NOT NULL, `total_contribution` REAL NOT NULL, `total_fine` REAL NOT NULL, `total_loan` REAL NOT NULL, `total_interest` REAL NOT NULL, `total_dividend` REAL NOT NULL, `current_meeting_count` INTEGER NOT NULL, `premium` REAL NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "duration",
+            "columnName": "duration",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "meetingFreq",
+            "columnName": "meeting_freq",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "loanAllowed",
+            "columnName": "loan_allowed",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "loanInterest",
+            "columnName": "loan_interest",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "loanPaymentFrequency",
+            "columnName": "loan_payment_frequency",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fineForAbsence",
+            "columnName": "fine_absence",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startDate",
+            "columnName": "start_date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "endDate",
+            "columnName": "end_date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalContribution",
+            "columnName": "total_contribution",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalFine",
+            "columnName": "total_fine",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalLoan",
+            "columnName": "total_loan",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalInterest",
+            "columnName": "total_interest",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalDividend",
+            "columnName": "total_dividend",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currentMeetingCount",
+            "columnName": "current_meeting_count",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "premium",
+            "columnName": "premium",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_table_chit_fund_name",
+            "unique": true,
+            "columnNames": [
+              "name"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_table_chit_fund_name` ON `${TABLE_NAME}` (`name`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "table_contributions",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `chit_number` INTEGER NOT NULL, `chit_fund_id` INTEGER NOT NULL, `date` TEXT NOT NULL, `meeting_count` INTEGER NOT NULL, `amount_paid` REAL NOT NULL, `fine_paid` REAL NOT NULL, `loan_interest_paid` REAL NOT NULL, `member_present` INTEGER NOT NULL, `loan_capital_paid` REAL NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "chitNumber",
+            "columnName": "chit_number",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "chitFundId",
+            "columnName": "chit_fund_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "meetingCount",
+            "columnName": "meeting_count",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amountPaid",
+            "columnName": "amount_paid",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "finePaid",
+            "columnName": "fine_paid",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "loanInterestPaid",
+            "columnName": "loan_interest_paid",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "memberPresent",
+            "columnName": "member_present",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "loanCapitalPaid",
+            "columnName": "loan_capital_paid",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
         },
         "indices": [],
         "foreignKeys": []
@@ -72,7 +332,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '34e10207c9ff832623e565e99aa65c52')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3fdc90218480bf2966549bc9b188ad92')"
     ]
   }
 }
